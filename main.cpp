@@ -4,15 +4,22 @@ using namespace std;
 int main(){
     PatriciaTrie* patricia = new PatriciaTrie;
     patricia->insert("ab");
-    patricia->insert("abeja");
+    patricia->insert("abeja"); 
     patricia->insert("abba");
+    patricia->insert("a");
+    patricia->insert("zapallito");
     patricia->insert("zapallo");
+    patricia->insert("zapal");
     patricia->insert("zapallos");
-    cout<<patricia->find("abba")<<endl;
+
+    //patricia->print();
+
+    cout<<patricia->find("a")<<endl;
+    cout<<patricia->find("abbas")<<endl;
+    cout<<patricia->find("zapal")<<endl;
+    cout<<patricia->find("zapallito")<<endl;
     cout<<patricia->find("zapallo")<<endl;
     cout<<patricia->find("zapallos")<<endl;
-    cout<<patricia->find("ab")<<endl;
-    cout<<patricia->find("abeja")<<endl;
-    cout<<patricia->find("abejas")<<endl;
+ 
     return 0;
 }
