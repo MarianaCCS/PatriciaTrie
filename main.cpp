@@ -15,7 +15,7 @@ int main(){
     //patricia->print();
 
     cout<<patricia->find("a")<<endl;
-    cout<<patricia->find("abbas")<<endl;
+    cout<<patricia->find("abba")<<endl;
     cout<<patricia->find("zapal")<<endl;
     cout<<patricia->find("zapallito")<<endl;
     cout<<patricia->find("zapallo")<<endl;

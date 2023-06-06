@@ -49,7 +49,7 @@ void PatriciaTrie::insert(std::string prefix){
     if (!root->children[int(prefix[ind_prefix])]){ // caso base
         Node* nuevo = new Node(); nuevo->prefix = prefix; nuevo->endWord = true;
         root->children[int(prefix[ind_prefix])] = nuevo;
-        std::cout<<"Base: "<<nuevo->prefix<<std::endl;
+        //std::cout<<"Base: "<<nuevo->prefix<<std::endl;
         return; 
     } 
 
@@ -88,7 +88,7 @@ void PatriciaTrie::insert(std::string prefix){
                         temp->prefix = p;
                         */
                         temp->children[int(nuevo->prefix[0])] = nuevo;
-                        std::cout<<"Palabra : "<<temp->prefix<<" " <<nuevo->prefix<<std::endl;
+                        //std::cout<<"Palabra : "<<temp->prefix<<" " <<nuevo->prefix<<std::endl;
                         return;
                     }
                 }
@@ -100,7 +100,7 @@ void PatriciaTrie::insert(std::string prefix){
                     for (int i = ind_prefix; i<size; i++) nuevo->prefix+=prefix[i]; //lo que se debe añadir
                     nuevo->endWord = true; 
                     temp->children[int(nuevo->prefix[0])] = nuevo;
-                    std::cout<<"En else: "<<nuevo->prefix<<std::endl;
+                    //std::cout<<"En else: "<<nuevo->prefix<<std::endl;
 
                     // enviar lo que se encuentra despues del prefijo como otro hijo
                     if (ind!=temp_size-1){
@@ -112,14 +112,10 @@ void PatriciaTrie::insert(std::string prefix){
                         }
                         temp->endWord = false; // temp deja de ser endWord(si lo era)
                         temp->children[int(otro_hijo->prefix[0])] = otro_hijo; // añadimos el hijo
-                        std::cout<<"Otro hijo: "<<otro_hijo->prefix<<std::endl;
+                        //std::cout<<"Otro hijo: "<<otro_hijo->prefix<<std::endl;
                     }
                     return;
                 }
-           // }
-            //else{  // si es igual a size-1 quiere decir que ya es subcadena de otro nodo
-                
-           // }
         }
     } // llega aqui si ya no tiene un hijo asociado
     Node* nuevo = new Node();
@@ -127,5 +123,5 @@ void PatriciaTrie::insert(std::string prefix){
     for (int i = ind_prefix; i<size; i++) nuevo->prefix+=prefix[i]; //lo que se debe añadir
     nuevo->endWord = true; 
     temp->children[int(nuevo->prefix[0])] = nuevo;
-    std::cout<<"Fuera del while: "<<nuevo->prefix<<std::endl;
+    //std::cout<<"Fuera del while: "<<nuevo->prefix<<std::endl;
 }
