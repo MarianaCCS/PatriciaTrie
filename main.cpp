@@ -21,8 +21,9 @@ int main(){
     patricia->insert("zapallos");
 */
     patricia->print();
-
-    cout<<patricia->find("amorcito")<<endl;
+    cout<<patricia->find("rata")<<" ";
+    for(string word : diccionario) cout<<patricia->find(word)<<" ";
+    cout<<endl<<patricia->find("rata")<<endl;
     /*
     cout<<patricia->find("abba")<<endl;
     cout<<patricia->find("zapal")<<endl;
