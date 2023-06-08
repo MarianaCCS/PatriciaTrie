@@ -10,20 +10,9 @@ class PatriciaTrie{
 
     bool find(std::string prefix);
     void insert(std::string prefix);
-
-    void print_rec(Node* nodo,int pos){
-        for (int i = 0; i<256;i++) {
-            if (nodo->children[i]) {
-                std::cout<<nodo->children[i]->prefix<<","<<pos<<"\t";
-                print_rec(nodo->children[i],pos+1);
-                std::cout<<std::endl;
-            }
-        }
-    }
-
-    void print(){
-        print_rec(root,0);
-    }
+    void print_rec(Node* nodo,int pos);
+    void print(); // imprime con nivel al que pertenece la palabra
+    void remove(std::string prefix);
 };
 
 bool PatriciaTrie::find(std::string prefix){ //recorremos todo el arbol
@@ -94,26 +83,37 @@ void PatriciaTrie::insert(std::string prefix){
                 }
                
                 
-                else{ // caso contrario, debe crear un nuevo nodo
+                else{ // caso contrario, debe crear un nuevo nodo y cuidar dependencias del actual
                     Node* nuevo = new Node();
                     nuevo->prefix = "";
                     for (int i = ind_prefix; i<size; i++) nuevo->prefix+=prefix[i]; //lo que se debe añadir
                     nuevo->endWord = true; 
-                    temp->children[int(nuevo->prefix[0])] = nuevo;
                     //std::cout<<"En else: "<<nuevo->prefix<<std::endl;
 
                     // enviar lo que se encuentra despues del prefijo como otro hijo
-                    if (ind!=temp_size-1){
-                        Node* otro_hijo = new Node();
+                    if (ind<temp_size-1){
+                        Node* otro_hijo = new Node(); // nuevo nodo
                         otro_hijo->prefix = ""; otro_hijo->endWord=true;
                         for (int i=ind; i<temp_size; i++) otro_hijo->prefix+=temp->prefix[i]; // añadimos valor para el nuevo hijo (lo que había en nodo)
                         for (int i=ind; i<temp_size; i++){ // borramos lo de más
                             temp->prefix.pop_back();
                         }
                         temp->endWord = false; // temp deja de ser endWord(si lo era)
+                        
+                        std::cout<<"Otro hijo: "<<otro_hijo->prefix<<std::endl;
+                        
+                        // pasamos todas las dependencias al nuevo nodo
+                        for (int i=0; i<256; i++) {
+                            otro_hijo->children[i] = temp->children[i];
+                            temp->children[i] = nullptr;
+                        }
+                       // temp = temp->children[int(otro_hijo->prefix[0])];
                         temp->children[int(otro_hijo->prefix[0])] = otro_hijo; // añadimos el hijo
-                        //std::cout<<"Otro hijo: "<<otro_hijo->prefix<<std::endl;
+                        temp->children[int(nuevo->prefix[0])] = nuevo;     
+
                     }
+                
+                    temp->children[int(nuevo->prefix[0])] = nuevo; 
                     return;
                 }
         }
@@ -123,5 +123,37 @@ void PatriciaTrie::insert(std::string prefix){
     for (int i = ind_prefix; i<size; i++) nuevo->prefix+=prefix[i]; //lo que se debe añadir
     nuevo->endWord = true; 
     temp->children[int(nuevo->prefix[0])] = nuevo;
-    //std::cout<<"Fuera del while: "<<nuevo->prefix<<std::endl;
+    std::cout<<"Fuera del while: "<<nuevo->prefix<<"\tTemp: "<<temp->prefix<<std::endl;
+}
+
+void PatriciaTrie::print_rec(Node* nodo,int pos){
+    for (int i = 0; i<256;i++) {
+        if (nodo->children[i]) {
+            std::cout<<nodo->children[i]->prefix<<","<<pos<<"\t";
+            print_rec(nodo->children[i],pos+1);
+            std::cout<<std::endl;
+        }
+    }
+}
+
+void PatriciaTrie::print(){
+    print_rec(root,0);
+}
+
+void PatriciaTrie::remove(std::string prefix){
+    if (!find(prefix)){ // primero se busca
+        std::cout<<prefix<<" no se encuentra\n"; return;
+    }
+    /*
+        Casos:
+            1. Se encuentra la palabra, es hoja (no tiene hijos) - solo borramos el nodo
+            2. Se encuentra la palabra, no es hoja (tiene hijos):
+                borramos el nodo 
+                    - solo tiene un hijo:
+                        ese hijo sube (reemplazar)
+                    - tiene varios hijos:
+                        
+    */      
+    Node* temp = root; // vamos a recorrer
+
 }
