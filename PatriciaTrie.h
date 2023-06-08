@@ -13,6 +13,8 @@ class PatriciaTrie{
     void print_rec(Node* nodo,int pos);
     void print(); // imprime con nivel al que pertenece la palabra
     void remove(std::string prefix);
+    std::string to_string(std::string sep);
+    void to_string_rec(Node* nodo, std::string cadena, std::string& result, std::string sep);
 };
 
 bool PatriciaTrie::find(std::string prefix){ //recorremos todo el arbol
@@ -38,7 +40,7 @@ void PatriciaTrie::insert(std::string prefix){
     if (!root->children[int(prefix[ind_prefix])]){ // caso base
         Node* nuevo = new Node(); nuevo->prefix = prefix; nuevo->endWord = true;
         root->children[int(prefix[ind_prefix])] = nuevo;
-        std::cout<<"Base: "<<nuevo->prefix<<std::endl;
+        //std::cout<<"Base: "<<nuevo->prefix<<std::endl;
         return; 
     } 
 
@@ -77,31 +79,32 @@ void PatriciaTrie::insert(std::string prefix){
                         temp->prefix = p;
                         */
                         temp->children[int(nuevo->prefix[0])] = nuevo;
-                        std::cout<<"Palabra : "<<temp->prefix<<" " <<nuevo->prefix<<std::endl;
+                        //std::cout<<"Palabra : "<<temp->prefix<<" " <<nuevo->prefix<<std::endl;
                         return;
                     }
                 }
                
                 
-                else{ // caso contrario, debe crear un nuevo nodo y cuidar dependencias del actual
+                else if (ind<temp_size){ // caso contrario, debe crear un nuevo nodo y cuidar dependencias del actual
                   
                     Node* nuevo = new Node();
                     nuevo->prefix = "";
                     for (int i = ind_prefix; i<size; i++) nuevo->prefix+=prefix[i]; //lo que se debe añadir
                     nuevo->endWord = true; 
-                    std::cout<<"Temp: "<<temp->prefix<<"\tEn else: "<<nuevo->prefix<<std::endl;
+                    //std::cout<<"Temp: "<<temp->prefix<<"\tEn else: "<<nuevo->prefix<<std::endl;
 
                     // enviar lo que se encuentra despues del prefijo como otro hijo
                     if (ind<temp_size){
                         Node* otro_hijo = new Node(); // nuevo nodo
-                        otro_hijo->prefix = ""; otro_hijo->endWord=true;
+                        otro_hijo->prefix = ""; otro_hijo->endWord=false;
                         for (int i=ind; i<temp_size; i++) otro_hijo->prefix+=temp->prefix[i]; // añadimos valor para el nuevo hijo (lo que había en nodo)
                         for (int i=ind; i<temp_size; i++){ // borramos lo de más
                             temp->prefix.pop_back();
                         }
+                        if(temp->endWord) otro_hijo->endWord = true;
                         temp->endWord = false; // temp deja de ser endWord(si lo era)
                         
-                        std::cout<<"Otro hijo: "<<otro_hijo->prefix<<"\t";
+                        //std::cout<<"Otro hijo: "<<otro_hijo->prefix<<"\t";
                         
                         // pasamos todas las dependencias al nuevo nodo
                         for (int i=0; i<256; i++) {
@@ -111,7 +114,7 @@ void PatriciaTrie::insert(std::string prefix){
                        // temp = temp->children[int(otro_hijo->prefix[0])];
                         temp->children[int(otro_hijo->prefix[0])] = otro_hijo; // añadimos el hijo
                         temp->children[int(nuevo->prefix[0])] = nuevo;     
-                        std::cout<<"Nuevo: "<<nuevo->prefix<<std::endl;
+                        //std::cout<<"Nuevo: "<<nuevo->prefix<<std::endl;
                         return;
                     }
                 
@@ -125,7 +128,7 @@ void PatriciaTrie::insert(std::string prefix){
     for (int i = ind_prefix; i<size; i++) nuevo->prefix+=prefix[i]; //lo que se debe añadir
     nuevo->endWord = true; 
     temp->children[int(nuevo->prefix[0])] = nuevo;
-    std::cout<<"Fuera del while: "<<nuevo->prefix<<"\tTemp: "<<temp->prefix<<std::endl;
+    //std::cout<<"Fuera del while: "<<nuevo->prefix<<"\tTemp: "<<temp->prefix<<std::endl;
 }
 
 void PatriciaTrie::print_rec(Node* nodo,int pos){
@@ -158,4 +161,20 @@ void PatriciaTrie::remove(std::string prefix){
     */      
     Node* temp = root; // vamos a recorrer
 
+}
+
+std::string PatriciaTrie::to_string(std::string sep){
+    std::string result = "";
+    to_string_rec(root,"",result,sep);
+    return result;
+}
+
+void PatriciaTrie::to_string_rec(Node* nodo, std::string cadena, std::string& result, std::string sep){
+    if(nodo->endWord) result+= cadena+sep;
+    
+        for (int i=0; i<256; i++){
+            if(nodo->children[i]) 
+                to_string_rec(nodo->children[i],cadena+nodo->children[i]->prefix,result,sep);
+        }
+    
 }

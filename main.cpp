@@ -20,10 +20,9 @@ int main(){
     patricia->insert("zapal");
     patricia->insert("zapallos");
 */
-    patricia->print();
-    cout<<patricia->find("rata")<<" ";
+    //patricia->print();
     for(string word : diccionario) cout<<patricia->find(word)<<" ";
-    cout<<endl<<patricia->find("rata")<<endl;
+    cout<<patricia->to_string("-");
     /*
     cout<<patricia->find("abba")<<endl;
     cout<<patricia->find("zapal")<<endl;
