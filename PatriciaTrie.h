@@ -55,6 +55,7 @@ void PatriciaTrie::insert(std::string prefix){
                     ind_prefix++; // si coinciden indice solo avanza
                      
                     if (ind_prefix==size){ // se intenta insertar palabra similar con menos  longitud
+                        if (ind==temp_size-1) return; //repetidos
                         Node* nuevo = new Node();  // creamos un nod basandonos en temp
                         nuevo->prefix = "";
                         int size_temp_actual = int(temp->prefix.size());
